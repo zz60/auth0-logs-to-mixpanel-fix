@@ -100,9 +100,13 @@ function lastLogCheckpoint(req, res) {
       (context, callback) => {
         console.log(`Sending ${context.logs.length}`);
         if (context.logs.length > 0) {
-
-          var mixpanelEvents = context.logs.map(function (log) {
-            var eventName = logTypes[log.type].event;
+          const now = Date.now();
+          const mixpanelEvents = context.logs.map(function (log) {
+            const eventName = logTypes[log.type].event;
+            // TODO - consider setting the time to date in the underlying log file?
+            // log.time = log.date;
+            log.time = now;
+            log.distinct_id = 'auth0-logs';
             return {
               event: eventName,
               properties: log

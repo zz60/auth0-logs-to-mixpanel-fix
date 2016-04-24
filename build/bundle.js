@@ -147,24 +147,30 @@ module.exports =
 	    }, function (context, callback) {
 	      console.log('Sending ' + context.logs.length);
 	      if (context.logs.length > 0) {
+	        (function () {
+	          var now = Date.now();
+	          var mixpanelEvents = context.logs.map(function (log) {
+	            var eventName = logTypes[log.type].event;
+	            // TODO - consider setting the time to date in the underlying log file?
+	            // log.time = log.date;
+	            log.time = now;
+	            log.distinct_id = 'auth0-logs';
+	            return {
+	              event: eventName,
+	              properties: log
+	            };
+	          });
 
-	        var mixpanelEvents = context.logs.map(function (log) {
-	          var eventName = logTypes[log.type].event;
-	          return {
-	            event: eventName,
-	            properties: log
-	          };
-	        });
-
-	        // import all events at once
-	        Logger.import_batch(mixpanelEvents, function (errorList) {
-	          if (errorList && errorList.length > 0) {
-	            console.log('Errors occurred sending logs to Mixpanel:', JSON.stringify(errorList));
-	            return callback(err);
-	          }
-	          console.log('Upload complete.');
-	          return callback(null, context);
-	        });
+	          // import all events at once
+	          Logger.import_batch(mixpanelEvents, function (errorList) {
+	            if (errorList && errorList.length > 0) {
+	              console.log('Errors occurred sending logs to Mixpanel:', JSON.stringify(errorList));
+	              return callback(err);
+	            }
+	            console.log('Upload complete.');
+	            return callback(null, context);
+	          });
+	        })();
 	      } else {
 	        // no logs, just callback
 	        console.log('No logs to upload - completed.');
