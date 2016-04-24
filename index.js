@@ -35,8 +35,8 @@ function lastLogCheckpoint(req, res) {
     });
 
     // Create a new event logger
-    const Logger = Mixpanel.init(MIXPANEL_TOKEN, {
-      key: MIXPANEL_KEY
+    const Logger = Mixpanel.init(ctx.data.MIXPANEL_TOKEN, {
+      key: ctx.data.MIXPANEL_KEY
     });
 
     Logger.error = function (err, context) {
