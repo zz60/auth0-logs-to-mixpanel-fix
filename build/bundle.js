@@ -84,8 +84,8 @@ module.exports =
 	    });
 
 	    // Create a new event logger
-	    var Logger = Mixpanel.init(MIXPANEL_TOKEN, {
-	      key: MIXPANEL_KEY
+	    var Logger = Mixpanel.init(ctx.data.MIXPANEL_TOKEN, {
+	      key: ctx.data.MIXPANEL_KEY
 	    });
 
 	    Logger.error = function (err, context) {
