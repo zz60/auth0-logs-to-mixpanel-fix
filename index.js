@@ -110,7 +110,7 @@ function lastLogCheckpoint(req, res) {
           Logger.import_batch(mixpanelEvents, function(errorList) {
             if (errorList && errorList.length > 0) {
               console.log('Errors occurred sending logs to Mixpanel:', JSON.stringify(errorList));
-              return callback(err);
+              return callback(errorList);
             }
             console.log('Upload complete.');
             return callback(null, context);
