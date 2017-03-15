@@ -366,9 +366,9 @@ function getLogsFromAuth0 (domain, token, take, from, cb) {
       Accept: 'application/json'
     }
   }, (err, res, body) => {
-    if (err) {
+    if (err || res.statusCode !== 200) {
       console.log('Error getting logs', err);
-      cb(null, err);
+      cb(null, err || body);
     } else {
       cb(body);
     }
