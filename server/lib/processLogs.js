@@ -62,6 +62,8 @@ module.exports = storage =>
 
       const now = Date.now();
       const mixpanelEvents = logs.map((log) => {
+        Mixpanel.identify(log.user_id);
+
         const eventName = loggingTools.logTypes.get(log.type);
         log.time = now;
         log.distinct_id = log.user_id || log.user_name || log.client_id || log._id;
